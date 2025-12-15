@@ -1,0 +1,106 @@
+#root {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+
+  justify-content: center;
+  align-items: center;
+}
+
+html {
+  background-color: rgb(206, 206, 206);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 10rem auto 10rem;
+
+  border-radius: 10px;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.title {
+  grid-column: 1 /-1;
+
+  text-align: center;
+  font-size: 2rem;
+  margin: 10px 0 20px 0;
+  padding-bottom: 5px;
+}
+
+h2 {
+  display: grid;
+  justify-content: center;
+
+  margin-bottom: 0;
+  margin-top: 5px;
+
+  font-size: 1rem;
+  font-weight: bolder;
+}
+
+section {
+  font-size: 1.25rem;
+}
+
+section:nth-child(even) {
+  background-color: rgb(227, 227, 227);
+}
+
+p {
+  display: grid;
+  grid-template-columns: max-content;
+  justify-content: left;
+  align-items: left;
+
+  padding-left: 5px;
+  margin-left: 1rem;
+  margin-top: 0;
+
+  font-weight: bold;
+}
+
+.guest-name,
+.guest-email,
+.guest-phone {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.guest-name.row-hover,
+.guest-email.row-hover,
+.guest-phone.row-hover {
+  cursor: pointer;
+  background-color: rgb(255, 255, 161);
+}
+
+.guest-names,
+.guest-emails,
+.guest-phones {
+  display: grid;
+  grid-gap: 5px;
+
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.guest-name {
+  justify-content: left;
+  margin-left: 1rem;
+  padding-left: 5px;
+}
+
+.guest-phone {
+  margin-right: 1rem;
+  padding-right: 5px;
+}
+
+.guest-email {
+  padding-left: 20px;
+  padding-right: 20px;
+}
