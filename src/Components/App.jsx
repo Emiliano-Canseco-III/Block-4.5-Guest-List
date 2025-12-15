@@ -1,22 +1,56 @@
-import { useState } from "react";
-import { guests as initialGuestData } from "../data.js";
+import { useState, useEffect } from "react";
+import GuestRow from "./GuestRow.jsx";
 import "../Stylesheets/index.css";
 
 export default function App() {
   // State to hold the list of guests and the selected guest
-  const [guestList] = useState(initialGuestData);
+  const [guestList, setGuestList] = useState([]);
   const [selectedGuest, setSelectedGuest] = useState(null);
   const [hoveredGuestId, setHoveredGuestId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // State for loading status
+  const [error, setError] = useState(null); // State for error handling
 
-  // Handle mouse enter event
-  const handleMouseEnter = (guestId) => {
-    setHoveredGuestId(guestId);
-  };
+  useEffect(() => {
+    const API_ENDPOINT =
+      "https://fsa-crud-2aa9294fe819.herokuapp.com/api/2509-FTB-CT-WEB-PT/guests";
 
-  // Handle mouse leave event
-  const handleMouseLeave = () => {
-    setHoveredGuestId(null);
-  };
+    const fetchGuests = async () => {
+      try {
+        const response = await fetch(API_ENDPOINT);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.data && Array.isArray(data.data)) {
+          setGuestList(data.data);
+        } else if (Array.isArray(data)) {
+          setGuestList(data);
+        } else {
+          console.error("API response is not an array:", data);
+          setError("Received data in an unexpected format.");
+          setGuestList([]);
+        }
+
+        setError(null);
+      } catch (e) {
+        console.error("Fetching guests failed:", e);
+        setError("Failed to load guest list. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGuests();
+  }, []);
+
+  if (isLoading) {
+    return <h1>Loading guest list...</h1>;
+  }
+  if (error) {
+    return <h1 style={{ color: "red" }}>Error: {error}</h1>;
+  }
 
   return (
     <div>
@@ -34,56 +68,23 @@ export default function App() {
         // === VIEW GUEST LIST ===
         <main>
           <h1 className="title">Guest List</h1>
-          <div className="guest-names">
-            <h2>Name</h2>
-            {guestList.map((guest) => (
-              <section
-                key={guest.id}
-                className={`guest-name ${
-                  hoveredGuestId === guest.id ? "row-hover" : ""
-                }`} // Apply hover class conditionally
-                onClick={() => setSelectedGuest(guest)}
-                onMouseEnter={() => handleMouseEnter(guest.id)} // Add hover handlers
-                onMouseLeave={handleMouseLeave}
-              >
-                {guest.name}
-              </section>
-            ))}
-          </div>
 
-          <div className="guest-emails">
-            <h2>Email</h2>
-            {guestList.map((guest) => (
-              <section
-                key={guest.id}
-                className={`guest-email ${
-                  hoveredGuestId === guest.id ? "row-hover" : ""
-                }`}
-                onClick={() => setSelectedGuest(guest)}
-                onMouseEnter={() => handleMouseEnter(guest.id)}
-                onMouseLeave={handleMouseLeave}
-              >
-                {guest.email}
-              </section>
-            ))}
-          </div>
+          {/* Headers */}
+          <h2 className="header-names">Name</h2>
+          <h2 className="header-emails">Email</h2>
+          <h2 className="header-phones">Phone</h2>
 
-          <div className="guest-phones">
-            <h2>Phone</h2>
-            {guestList.map((guest) => (
-              <section
-                key={guest.id}
-                className={`guest-phone ${
-                  hoveredGuestId === guest.id ? "row-hover" : ""
-                }`}
-                onClick={() => setSelectedGuest(guest)}
-                onMouseEnter={() => handleMouseEnter(guest.id)}
-                onMouseLeave={handleMouseLeave}
-              >
-                {guest.phone}
-              </section>
-            ))}
-          </div>
+          {/* // Iterate over list once and render the GuestRow component. */}
+          {guestList.map((guest, i) => (
+            <GuestRow
+              key={guest.id}
+              guest={guest}
+              index={i}
+              setSelectedGuest={setSelectedGuest}
+              hoveredGuestId={hoveredGuestId}
+              setHoveredGuestId={setHoveredGuestId}
+            />
+          ))}
           <p>Select a guest to see more details.</p>
         </main>
       )}

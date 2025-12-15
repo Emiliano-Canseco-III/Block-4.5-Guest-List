@@ -13,7 +13,7 @@ html {
 
 main {
   display: grid;
-  grid-template-columns: 10rem auto 10rem;
+  grid-template-columns: 1fr 2fr 1fr;
 
   border-radius: 10px;
   border: 2px solid black;
@@ -44,7 +44,7 @@ section {
   font-size: 1.25rem;
 }
 
-section:nth-child(even) {
+.odd-row {
   background-color: rgb(227, 227, 227);
 }
 
@@ -56,9 +56,19 @@ p {
 
   padding-left: 5px;
   margin-left: 1rem;
-  margin-top: 0;
+  margin-top: 1rem;
 
   font-weight: bold;
+}
+
+.header-names {
+  grid-column: 1;
+}
+.header-emails {
+  grid-column: 2;
+}
+.header-phones {
+  grid-column: 3;
 }
 
 .guest-name,
@@ -77,16 +87,6 @@ p {
 .guest-phone.row-hover {
   cursor: pointer;
   background-color: rgb(255, 255, 161);
-}
-
-.guest-names,
-.guest-emails,
-.guest-phones {
-  display: grid;
-  grid-gap: 5px;
-
-  margin-bottom: 10px;
-  width: 100%;
 }
 
 .guest-name {
